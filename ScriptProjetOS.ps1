@@ -1,10 +1,12 @@
 ﻿function StartOrStopService
 {
-    param(
+    param
+	(
         [string]$service,
         [string]$action
     )
-    switch ($action){
+    switch ($action)
+	{
         'start'{
             Start-Service $service
         }
@@ -14,14 +16,28 @@
         default{
             Write-Host 'error'
         }
-    }
+    }	
 }
 
 function ADNewUser
 {
-    [string]$name = Read-Host "Nom de l'utilisateur"
-    [string]$domain = Read-Host "Nom du domaine"
-    $password = Read-Host -AsSecureString "Mot de passe"
+	param
+	(
+		[Parameter(Mandatory=$false)]
+		[switch]$list
+	)
+	
+	if($list)
+	{
+		Get-ADUser -Filter *
+		return
+	}
+    else
+    {
+        [string]$name = Read-Host "Nom de l'utilisateur"
+        [string]$domain = Read-Host "Nom du domaine"
+        $password = Read-Host -AsSecureString "Mot de passe"
 
-    New-ADUser -name $name -server $domain -AccountPassword $password -Enabled $true
+        New-ADUser -name $name -server $domain -AccountPassword $password -Enabled $true
+    }
 }
